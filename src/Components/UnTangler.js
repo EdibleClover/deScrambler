@@ -1,5 +1,4 @@
-import engine from "php-parser"
-import unparse from "php-unparser"
+
 /*
 
 $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
@@ -22,37 +21,9 @@ unPack Js && perhaps somekind of function hook
 $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
 
-*/
-/* Gobble Gobble */
-var parser = new engine({
-    // some options :
-    parser: {
-        extractDoc: true,
-        php7: false
-    },
-    ast: {
-        withPositions: true
-    }
-});
-
-var options = {
-    indent: true,
-    dontUseWhitespaces: true,
-    shortArray: true,
-    bracketsNewLine: true,
-    forceNamespaceBrackets: true,
-    collapseEmptyLines: false
-};
-/*
-let parsed = parser.parseEval(code)
-let json = JSON.stringify(parsed) 
-///We can parse the AST to JSON to output the object
-///console.log(json)
-let formatted = unparse(parsed, options)
-*/
 
 /**Will handle setting the language selection and any decoding that is not language specific */
-class Decoder {
+class UnTangler {
     constructor(language) {
         this.language = language
     }
@@ -66,9 +37,9 @@ class Decoder {
         });
     };
     decodeChar = (char) => {
-        return char.replace(/chr\(([0-9]{1,3})\)/gmi, function(a,b){
+        return char.replace(/chr\(([0-9]{1,3})\)/gmi, function (a, b) {
             let x = String.fromCharCode(b)
-            return "\""+x+"\""   //To keep these as a string in teh original code
+            return "\"" + x + "\""   //To keep these as a string in teh original code
         })
     }
     fixConcats = (string) => {
@@ -77,53 +48,43 @@ class Decoder {
     //This seems odd
     removeBadChars = (string) => {
         let reg = /(?![\x00-\x7F]|[\xC0-\xDF][\x80-\xBF]|[\xE0-\xEF][\x80-\xBF]{2}|[\xF0-\xF7][\x80-\xBF]{3})./g;
-        return  string.replace(reg, '')
+        return string.replace(reg, '')
     }
-
+    //Not in Use
     ConcatArraysManually = (string) => {
         return string
-    } 
-    // Replaces all base64 strings 
+    }
+    // Replaces all base64s from PHP
     base64Decode = (string) => {
-        return string.replace(/base64_decode\(['"](.*?)['"]\)/g, function (a,b) {
-        let x = "'" + atob(b) + "'"
+        return string.replace(/base64_decode\(['"](.*?)['"]\)/g, function (a, b) {
+            let x = "'" + atob(b) + "'"
             return x
         });
     }
-    
+
 
 }
-/*Will have the formatting libs in here, also any bullshit that will need to be tweeked */
-class Formatter extends Decoder {
+class Formatter extends UnTangler {
     constructor(language) {
         super(language)
     }
-    /**This is buggy at best */
-    formatPHP = (code) => {
-        try {
-            let parsed = parser.parseCode(code)
-            console.log(parsed)
-            let formatted = unparse(parsed, options)
-            return formatted
-        }
-        catch (e) { return e }
-    }
-    /*Cheat and just add line breaks after ; */
+
+    // Add line breaks after ;
     hardFormat = (string) => {
-        return string.replace(/(;)/g, function (a,b) {
+        return string.replace(/(;)/g, function (a, b) {
             let x = ";\n"
-                return x
-            });
+            return x
+        });
     }
 }
 
-export { Decoder, Formatter }
+export { UnTangler, Formatter }
 
-/** 
+/**
 badChars = (string) => {
     let stripped = string.replace(/[^\x20-\x7E]/g, '');
     return stripped
-    
+
 }
 
 
