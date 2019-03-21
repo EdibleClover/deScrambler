@@ -6,22 +6,16 @@ import MyButton from './MyButton.js'
 
 
 export default class Controls extends Component {
-   
     render() {
         const decoders = this.props.decoders 
-        ///Object.values(controls).slice(2)
-       console.warn(decoders)
-            
-            const buttons = decoders.map((decoder,i) =>
-            
+            const buttons = Object.keys(decoders).map((decoder) =>
                 <MyButton
-                    key={decoder[i]}
-                    value={decoder.value}
+                    key={decoder}
+                    value={decoder}
                     handleClick={(e)=>this.props.handleClick(e)}
-                    isActive={decoder.value}
+                    isActive={decoders[decoder]}
                 />
             );
-
         return (
             <ButtonToolbar>
                 {buttons}

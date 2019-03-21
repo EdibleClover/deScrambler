@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import SplitterLayout from 'react-splitter-layout';
 import 'react-splitter-layout/lib/index.css';
-import { ButtonBar } from './index.js'
+import { ButtonBar, UnTangler } from './index.js'
 
 
 export default class Decoder extends Component {
@@ -13,32 +13,33 @@ export default class Decoder extends Component {
         this.state = {
             value: 'Decode Me!',
             decoded: '',
-            decoders:[{"hex": true}, {"fromChar": true}, {"fixConcats": true}, {"removeBadChars": true}, {"base64Decode": true}, {"Format": false}]
+            decoders: {"hex": true, "fromChar": true, "fixConcats": true, "removeBadChars": true, "base64Decode": true, "Format": false}
         }
-    
-    
-    
     }
     HandleTextChange = (e) => {
         this.setState({ value: e.target.value, decoded: e.target.value })
     }
-
-
-
     handleClick = (e) => {
         const target = e.target.value
-        this.setState((state)=>{
-            return {[target]:!state[target]}
-        });
-        console.log(Object.values(this.state))
+        const decoders = {...this.state.decoders}
+        this.setState(prevState => ({
+            decoders: {
+                ...prevState.decoders,
+                [target]:!prevState.decoders[target]
+            }
+        }))
     }
-
-
-
+    unTangle = (code) => {
+        const unTangler = new UnTangler()
+        
+        Object.keys(this.state.decoders).forEach((decoder,i)=> {
+            if (this.state.decoders.decoder){
+                code = unTangler[decoder](code)
+            }
+            return code
+        })
+    }
     render() {
-        let controls = this.state
-        //pass on controls without uneeded extra state
-        //seems more same to strip it and send it down to components
         return (
             <div>
                 <div className="Controls">
@@ -47,11 +48,6 @@ export default class Decoder extends Component {
                         decoders={this.state.decoders}
                     />
                 </div>
-
-
-
-
-
                 <SplitterLayout>
                     <div className="Input">
                         <textarea

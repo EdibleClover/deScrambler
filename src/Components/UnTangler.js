@@ -24,19 +24,13 @@ $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
 /**Will handle setting the language selection and any decoding that is not language specific */
 class UnTangler {
-    constructor(language) {
-        this.language = language
-    }
-    getLang = () => {
-        return this.language
-    }
 
-    decodehex = (string) => {
+    hex = (string) => {
         return string.replace(/\\x([0-9A-Fa-f]{2})/gm, function () {
             return String.fromCharCode(parseInt(arguments[1], 16));
         });
     };
-    decodeChar = (char) => {
+    fromChar = (char) => {
         return char.replace(/chr\(([0-9]{1,3})\)/gmi, function (a, b) {
             let x = String.fromCharCode(b)
             return "\"" + x + "\""   //To keep these as a string in teh original code
@@ -54,7 +48,7 @@ class UnTangler {
     ConcatArraysManually = (string) => {
         return string
     }
-    // Replaces all base64s from PHP
+    // Change this to just decode anything
     base64Decode = (string) => {
         return string.replace(/base64_decode\(['"](.*?)['"]\)/g, function (a, b) {
             let x = "'" + atob(b) + "'"
