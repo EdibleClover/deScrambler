@@ -3,5 +3,11 @@
 }
 .Controls{
     height:50px;
-    border:solid black;
 }
+textarea {
+    border:none;
+    outline: none;
+    width:100%;
+    height:100%;
+  }
+.Button {padding:3px;}
