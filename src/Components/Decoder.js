@@ -7,7 +7,6 @@ import { ButtonBar, UnTangler } from './index.js'
 export default class Decoder extends Component {
 
 
-//NEED TO TURN DECODERS NAMES INTO A BIG ARRAY AND USE THAT TO PASS TEH DATA DOWN INTO EVERYTHING
     constructor(props) {
         super(props)
         this.state = {
