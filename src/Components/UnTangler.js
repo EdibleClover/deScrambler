@@ -17,6 +17,12 @@ unPack Js && perhaps somekind of function hook
 
 
 
+Remove Comments
+url decode
+
+
+
+
 
 $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
@@ -49,11 +55,24 @@ class UnTangler {
         return string
     }
     // Change this to just decode anything
-    base64Decode = (string) => {
-        return string.replace(/base64_decode\(['"](.*?)['"]\)/g, function (a, b) {
-            let x = "'" + atob(b) + "'"
-            return x
-        });
+    base64php = (string) => {
+        try {
+            return string.replace(/base64_decode\(['"](.*?)['"]\)/g, function (a, b) {
+                let x = "'" + atob(b) + "'"
+                return x
+            });
+        }catch(e){
+            
+            console.log("bad Base64")
+            return "bad input!"
+        }
+    }
+    base64 = (string) => {
+        try{
+            return atob(string)
+        }catch(e){
+            return e.toString()
+        }
     }
 
 

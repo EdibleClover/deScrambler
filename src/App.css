@@ -1,13 +1,14 @@
-.Decoder{
-    padding: 5px
+.decoder{
+    margin: 15px;
 }
 .Controls{
-    height:50px;
+    height:70px;
 }
-textarea {
+.input {
     border:none;
     outline: none;
-    width:100%;
+    width:90%;
     height:100%;
+   
   }
 .Button {padding:3px;}
