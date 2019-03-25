@@ -74,6 +74,13 @@ class UnTangler {
             return e.toString()
         }
     }
+    //Herm, this doesn't return Correctly....
+    format = (string) => {
+        return string.replace(/(;)/g, function (a, b) {
+            let x = ";\r"
+            return x
+        });
+    }
 
 
 }

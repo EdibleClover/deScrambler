@@ -3,7 +3,12 @@ import SplitterLayout from 'react-splitter-layout';
 import 'react-splitter-layout/lib/index.css';
 import { ButtonBar, UnTangler } from './index.js'
 
-
+/**
+ * Main component,
+ * Add a decoder to the untangler object,
+ * add the decoder name to the decoders state
+ * Buttons are generated and will decode the input string
+ */
 export default class Decoder extends Component {
     constructor(props) {
         super(props)
