@@ -3,6 +3,13 @@ import SplitterLayout from 'react-splitter-layout';
 import 'react-splitter-layout/lib/index.css';
 import { ButtonBar, UnTangler } from './index.js'
 
+/**%%%%%%%%%%%%%%%%%%%%%%%% */
+import worker from "./MyWorker.js"
+import WebWorker from "./WorkerSetup";
+/**%%%%%%%%%%%%%%%%%%%%%%%% */
+
+
+
 /**
  * Main component,
  * Add a decoder to the untangler object,
@@ -25,7 +32,12 @@ export default class Decoder extends Component {
     }
     //?? Should clicking a button apply the change??? Probably, but its confusing me for now
     handleClick = (e) => {
-        
+        /**%%%%%%%%%%%%%%%%%%%%%%%% */
+        this.WetWork()
+    
+        /**%%%%%%%%%%%%%%%%%%%%%%%% */
+
+
         //We need to update the state of decoders THEN decode the value and set state again
         const target = e.target.value
         const current = this.state.decoders
@@ -53,6 +65,17 @@ export default class Decoder extends Component {
           decoders[decoders] = false
         })
         this.setState({decoders:decoders})
+    }
+    WetWork = () => {
+        this.worker.postMessage("FilthyData");
+        this.worker.addEventListener("hello", event => {
+                console.log(event.data)
+        });
+    }
+
+    componentDidMount = () => {
+        this.worker = new WebWorker(worker)
+        console.warn(this.worker)
     }
     render() {
         return (
