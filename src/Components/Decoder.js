@@ -8,8 +8,6 @@ import worker from "./MyWorker.js"
 import WebWorker from "./WorkerSetup";
 /**%%%%%%%%%%%%%%%%%%%%%%%% */
 
-
-
 /**
  * Main component,
  * Add a decoder to the untangler object,
@@ -30,7 +28,6 @@ export default class Decoder extends Component {
         let x = this.unTangle(target)
         this.setState({value:target, decoded: x })
     }
-    //?? Should clicking a button apply the change??? Probably, but its confusing me for now
     handleClick = (e) => {
         /**%%%%%%%%%%%%%%%%%%%%%%%% */
         this.WetWork()
