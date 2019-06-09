@@ -20,18 +20,27 @@ export default class Decoder extends Component {
         this.state = {
             value: `if(isset($_GET["gray"])&&$_GET["gray"]=="gray"){$func="cr"."ea"."te_"."fun"."ction";$x=$func("\$c","e"."v"."al"."('?>'.base"."64"."_dec"."ode(\$c));")`,
             decoded: '',
-            decoders: {"hex": false, "fromChar": false, "fixConcats": false, "removeBadChars": false, "base64": false}
+            decoders: {
+                "hex": false,
+                "fromChar": false,
+                "fixConcats": false,
+                "removeBadChars": false,
+                "base64": false,
+                "removeComments": false,
+                "format": false,
+                "base64php": false
+            }
         }
     }
     HandleTextChange = (e) => {
         const target = e.target.value
         let x = this.unTangle(target)
-        this.setState({value:target, decoded: x })
+        this.setState({ value: target, decoded: x })
     }
     handleClick = (e) => {
         /**%%%%%%%%%%%%%%%%%%%%%%%% */
         this.WetWork()
-    
+
         /**%%%%%%%%%%%%%%%%%%%%%%%% */
 
 
@@ -40,33 +49,33 @@ export default class Decoder extends Component {
         const current = this.state.decoders
         current[target] = !current[target]
         this.setState({
-            decoders:current
-        },() => {
-            this.setState({decoded: this.unTangle(this.state.value) })
+            decoders: current
+        }, () => {
+            this.setState({ decoded: this.unTangle(this.state.value) })
         });
     }
     unTangle = (code) => {
         const unTangler = new UnTangler()
-        const decoders = {...this.state.decoders}
-        Object.keys(decoders).forEach((decoder,i)=> {
-            if (this.state.decoders[decoder]){
+        const decoders = { ...this.state.decoders }
+        Object.keys(decoders).forEach((decoder, i) => {
+            if (this.state.decoders[decoder]) {
                 code = unTangler[decoder](code)
                 console.warn(`untangler being used module: ${decoder}\n ${code}`)
             }
         })
         return code
     }
-    disableButtons = () =>{
-        const decoders = {...this.state.decoders}
-        Object.keys(decoders).forEach((decoder,i)=> {
-          decoders[decoders] = false
+    disableButtons = () => {
+        const decoders = { ...this.state.decoders }
+        Object.keys(decoders).forEach((decoder, i) => {
+            decoders[decoders] = false
         })
-        this.setState({decoders:decoders})
+        this.setState({ decoders: decoders })
     }
     WetWork = () => {
         this.worker.postMessage("FilthyData");
         this.worker.addEventListener("hello", event => {
-                console.log(event.data)
+            console.log(event.data)
         });
     }
 
@@ -79,7 +88,7 @@ export default class Decoder extends Component {
             <div className="decoder">
                 <div className="controls">
                     <ButtonBar
-                        handleClick={(e) => {this.handleClick(e)}}
+                        handleClick={(e) => { this.handleClick(e) }}
                         decoders={this.state.decoders}
                     />
                 </div>

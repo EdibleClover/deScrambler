@@ -77,7 +77,13 @@ class UnTangler {
     //Herm, this doesn't return Correctly....
     format = (string) => {
         return string.replace(/(;)/g, function (a, b) {
-            let x = ";\r"
+            let x = ";\n"
+            return x
+        });
+    }
+    removeComments = (string) => {
+        return string.replace(/\/\*.*?\*\//g,() => {
+            let x = ""
             return x
         });
     }
